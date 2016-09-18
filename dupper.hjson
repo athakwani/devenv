@@ -14,7 +14,7 @@
       '''
     },
     {
-      name: "gut",
+      name: "dev-packages",
       cmd:
       '''
         curl -sSL https://get.dupper.co/dev/index | sh
@@ -53,7 +53,7 @@
           fi
           
           mkdir -p $1
-          gut sync -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $1
+          dev sync -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $1
         '''
      }]
    }
