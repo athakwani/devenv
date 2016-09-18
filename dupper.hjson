@@ -25,7 +25,7 @@
     devenv: [{
         server:
         '''
-          if [ !-f $HOME/.ssh/devenv ]
+          if [ ! -f $HOME/.ssh/devenv ]
           then
             mkdir -p $HOME/.ssh
             ssh-keygen -q -t rsa -N "" -f "$HOME/.ssh/devenv"
@@ -47,13 +47,13 @@
             curl -sSL https://get.dupper.co/dex/index | sh
           fi
           
-          if [ !-f $HOME/.ssh/devenv ]
+          if [ ! -f $HOME/.ssh/devenv ]
           then
             echo "$PRIVATEKEY" > $HOME/.ssh/devenv
           fi
           
           mkdir -p $1
-          dev sync -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $1
+          dev sync -v -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $1
         '''
      }]
    }
