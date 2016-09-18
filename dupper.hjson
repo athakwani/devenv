@@ -1,0 +1,60 @@
+{
+  ports: 
+  [
+    "9418:9418",
+    "2222:22"
+  ],
+  dependencies:
+  [
+    {
+      name: "linux-packages",
+      cmd:
+      '''
+        apt-get install -y curl sudo inotify-tools openssh-server
+      '''
+    },
+    {
+      name: "gut",
+      cmd:
+      '''
+        curl -sSL https://get.dupper.co/dev/index | sh
+      '''
+    }
+  ],
+  commands: {
+    devenv: [{
+        server:
+        '''
+          if [ !-f $HOME/.ssh/devenv ]
+          then
+            mkdir -p $HOME/.ssh
+            ssh-keygen -q -t rsa -N "" -f "$HOME/.ssh/devenv"
+            cat "$HOME/.ssh/devenv.pub" >> $HOME/.ssh/authorized_keys
+          fi
+         
+          PRIVATEKEY="$(cat $HOME/.ssh/devenv)"
+          _export PRIVATEKEY
+
+          cp $REPO_ROOT/.gitignore $REPO_ROOT/.gutignore
+          ulimit -n 9999
+          service ssh start
+        '''
+      },{
+        client:
+        '''
+          command -v "dev" > /dev/null 2>&1
+          if [[ $? -ne 0 ]]; then
+            curl -sSL https://get.dupper.co/dex/index | sh
+          fi
+          
+          if [ !-f $HOME/.ssh/devenv ]
+          then
+            echo "$PRIVATEKEY" > $HOME/.ssh/devenv
+          fi
+          
+          mkdir -p $1
+          gut sync -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $1
+        '''
+     }]
+   }
+}
