@@ -42,26 +42,9 @@
       },{
         client:
         '''
-          _verbose=0
-          _args=()
-          
-          while [ $# -gt 1 ]
-          do
-            opt="$1"
-            shift
-            case "$opt" in
-              --verbose | -v)
-                _verbose="$1"
-                shift
-                ;;
-              *)
-                _args+=("$opt")
-            esac
-          done          
-          
           command -v "dev" > /dev/null 2>&1
           if [[ $? -ne 0 ]]; then
-            curl -sSL https://get.dupper.co/dex/index | sh
+            curl -sSL https://get.dupper.co/dev/index | sh
           fi
           
           if [ ! -f $HOME/.ssh/devenv ]
@@ -69,8 +52,8 @@
             echo "$PRIVATEKEY" > $HOME/.ssh/devenv
           fi
           
-          mkdir -p ${_args[0]}
-          dev sync -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT ${_args[0]}
+          mkdir -p $1
+          dev sync $([[ "_verbose" == 1 ]] && echo "-v") -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $1
         '''
      }]
    }
