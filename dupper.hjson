@@ -2,13 +2,8 @@
   ports: 
   [
     "9418:9418",
-    "2222:22",
-    "8000:8000"
+    "2222:22"
   ],
-  env:
-  [
-    "NODE_ENV=development"
-  ]
   dependencies:
   [
     {
