@@ -37,23 +37,51 @@
 
           cp $REPO_ROOT/.gitignore $REPO_ROOT/.gutignore
           ulimit -n 9999
-          service ssh start
+        
+          service ssh status > /dev/null 2>&1
+          if [[ $? -ne 0 ]]
+          then
+            service ssh start
+          fi
         '''
       },{
         client:
         '''
+          _verbose=0
+          _path=""
+          
+          while [ "$#" -gt 0 ]
+          do
+            opt="$1"
+            shift
+            case "$opt" in
+              --verbose|-v)
+                _verbose=1
+                ;;
+              *)
+                if [[ -z $_path ]]
+                then
+                  _path="$opt"
+                fi
+                ;;
+            esac
+          done          
+                    
+          if [[ $_path == "" ]]
+          then
+            echo "Usage: dupper exec $REPO_NAME devenv [--verbose | -v] PATH"
+            exit 1
+          fi
+
           command -v "dev" > /dev/null 2>&1
           if [[ $? -ne 0 ]]; then
             curl -sSL https://get.dupper.co/dev/index | sh
           fi
           
-          if [ ! -f $HOME/.ssh/devenv ]
-          then
-            echo "$PRIVATEKEY" > $HOME/.ssh/devenv
-          fi
+          echo "$PRIVATEKEY" > $HOME/.ssh/devenv
           
-          mkdir -p $1
-          dev sync $([[ "_verbose" == 1 ]] && echo "-v") -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $1
+          mkdir -p $_path
+          dev sync $([[ $_verbose -eq 1 ]] && echo "-v") -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $_path
         '''
      }]
    }
