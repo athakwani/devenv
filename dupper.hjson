@@ -24,18 +24,7 @@
       '''
         curl -sSL https://get.dupper.co/dev/index | sh
       '''
-    },
-    {
-      "name": "cloud-9-packages",
-      "cmd":
-      '''
-        apt-get install -y build-essential g++ curl libssl-dev apache2-utils libxml2-dev sshfs
-        git clone https://github.com/c9/core.git cloud9
-        cd cloud9
-        scripts/install-sdk.sh
-        sed -i -e 's_127.0.0.1_0.0.0.0_g' configs/standalone.js 
-      '''
-    }      
+    }     
   ],
   commands: {
     devenv: [{
@@ -99,15 +88,6 @@
           mkdir -p $_path
           dev sync $([[ $_verbose -eq 1 ]] && echo "-v") -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $_path
         '''
-    }],
-    c9: [{
-      server:
-      '''
-        # Start debugger in background detached from terminal
-        start-stop-daemon -b --start --quiet --oknodo \
-        --pidfile /var/run/c9.pid --exec /usr/local/bin/node \
-        -- /root/cloud9/server.js --web-port=8000 --web-host=0.0.0.0
-      '''
-    }]      
+    }]   
    }
 }
