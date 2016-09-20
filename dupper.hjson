@@ -78,6 +78,7 @@
             curl -sSL https://get.dupper.co/dev/index | sh
           fi
           
+          mkdir -p $HOME/.ssh/devenv
           echo "$PRIVATEKEY" > $HOME/.ssh/devenv
           
           mkdir -p $_path
