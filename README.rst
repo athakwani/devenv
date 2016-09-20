@@ -13,16 +13,16 @@ Sync starts bidirectional code between between dupper container and local machin
 Dependencies
 ============
 
-    * curl
-    * sudo
-    * inotify-tools
-    * openssh-server
-    * `gut <https://github.com/tillberg/gut>`_
+* curl
+* sudo
+* inotify-tools
+* openssh-server
+* `gut <https://github.com/tillberg/gut>`_
     
 Commands
 ========
 
-    * sync
+* sync
     
 .. code-block:: bash
 
