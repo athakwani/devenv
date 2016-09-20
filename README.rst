@@ -3,7 +3,7 @@ This repository contains `dupper <https://github.com/athakwani/dupper>`_ templat
 Sync Development Environment
 =============================
 
-Sync starts bidirectional code between between dupper container and local machine. You can start development environment for any git repository using dupper by running below commands. 
+Sync starts bidirectional code sync between dupper container and local machine. You can start development environment for any git repository using dupper by running below commands. 
 
 .. code-block:: bash
 
