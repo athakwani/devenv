@@ -7,8 +7,8 @@ Sync starts bidirectional code between between dupper container and local machin
 
 .. code-block:: bash
 
-  dupper dup --name=myrepo --template-from=https://github.com/athakwani/sync <YOUR_GIT_REPO_URL>
-  dupper exec myrepo sync <LOCAL_PATH_FOR_REPO>
+  dupper dup --name=myrepo --template-from=https://github.com/athakwani/sync GITURL
+  dupper exec myrepo sync DIR
   
 Dependencies
 ============
@@ -27,5 +27,5 @@ Commands
 .. code-block:: bash
 
     Usage:
-    dupper exec CONTAINER sync LOCALPATH
+    dupper exec CONTAINER sync DIR
     
