@@ -9,16 +9,7 @@ Sync starts bidirectional code sync between repository source code and local dir
 
   dupper dup --name=myrepo --template-from=https://github.com/athakwani/sync GITURL
   dupper exec myrepo sync DIR
-  
-Dependencies
-============
-
-* curl
-* sudo
-* inotify-tools
-* openssh-server
-* `gut <https://github.com/tillberg/gut>`_
-    
+      
 Commands
 ========
 
