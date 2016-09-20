@@ -22,7 +22,7 @@
     }     
   ],
   commands: {
-    devenv: [{
+    sync: [{
         server:
         '''
           if [ ! -f $HOME/.ssh/devenv ]
