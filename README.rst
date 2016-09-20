@@ -1,9 +1,9 @@
-This repository contains `dupper <https://github.com/athakwani/dupper>`_ template for Sync development environment.
+This dupper template repository is for Sync development environment.
 
 Sync Development Environment
-=============================
+============================
 
-Sync starts bidirectional code sync between dupper container and local machine. You can start development environment for any git repository using dupper by running below commands. 
+Sync starts bidirectional code sync between repository source code and local directory. You can start sync for any git repository using below commands. 
 
 .. code-block:: bash
 
