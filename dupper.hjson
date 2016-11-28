@@ -73,15 +73,17 @@
             exit 1
           fi
 
+          set +e
           command -v "dev" > /dev/null 2>&1
           if [[ $? -ne 0 ]]; then
-            curl -sSL https://get.dupper.co/dev/index | sh
+            curl -sSL https://get.dupper.co/dev/index | sudo sh
           fi
           
           mkdir -p $HOME/.ssh
           echo "$PRIVATEKEY" > $HOME/.ssh/devenv
           
           mkdir -p $_path
+          ulimit -n 9999
           dev sync $([[ $_verbose -eq 1 ]] && echo "-v") -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $_path
         '''
     }]   
