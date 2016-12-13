@@ -155,6 +155,20 @@
         fi
 
         set +e
+        email=$(git config --global user.email)
+        if [[ $email == "" ]]; then
+            printf "Email for git commit: "
+            read GIT_EMAIL
+            git config --global user.email "$GIT_EMAIL"
+        fi
+
+        name=$(git config --global user.name)
+        if [[ $name == "" ]]; then
+            printf "Name for git commit: "
+            read GIT_NAME
+            git config --global user.name "$GIT_NAME"
+        fi
+
         hub add -A
         hub commit
         set -e
