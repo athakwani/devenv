@@ -132,7 +132,12 @@
             git config --global user.email "$(echo "$user_json" | jq -r .email)"
             git config --global user.name "$(echo "$user_json" | jq -r .name)"
 
-            hub create -d "Forked" $GITHUB_REPO
+            local repo_name=$(basename "${REPO_URL%.git}" | tr '[:upper:]' '[:lower:]')
+            local repo_user=$(basename $(dirname "${REPO_URL%.git}") | tr '[:upper:]' '[:lower:]')
+  
+            description="$(curl -sSL https://api.github.com/repos/$repo_user/$repo_name | jq .description)"
+
+            hub create -d "$description" $GITHUB_REPO
             hub remote set-url origin https://github.com/$GITHUB_USER/$GITHUB_REPO.git
             echo "https://${GITHUB_USER}:${GITHUB_PASSWORD}@github.com/$GITHUB_USER/$GITHUB_REPO.git" > ~/.git-credentials
         fi
