@@ -39,9 +39,19 @@
           PRIVATEKEY="$(cat $HOME/.ssh/devenv)"
           _export PRIVATEKEY
 
+          # Remove all occurances of .gut & .gutignore
+          sed -i 's/^.gut$//g'  .gitignore
+          sed -i 's/^.gutignore$//g'  .gitignore
+          # Remove trailing blank lines
+          sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' .gitignore       
+
+          # Copy .gitignore to .gutignore to avoid syncing to client.
           cp $REPO_ROOT/.gitignore $REPO_ROOT/.gutignore
+
+          # Now add .gut & .gutignore to .gitignore
           echo ".gut" >> $REPO_ROOT/.gitignore 
           echo ".gutignore" >> $REPO_ROOT/.gitignore 
+
           ulimit -n 9999
         
           service ssh status > /dev/null 2>&1
