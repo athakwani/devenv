@@ -10,7 +10,11 @@
       name: "linux-packages",
       cmd:
       '''
-        apt-get install -y curl sudo inotify-tools openssh-server
+        apt-get install -y curl sudo inotify-tools openssh-server jq wget
+        cd tmp
+        wget https://github.com/github/hub/releases/download/v2.3.0-pre8/hub-linux-amd64-2.3.0-pre8.tgz
+        tar -xvzf hub-linux-amd64-2.3.0-pre8.tgz 
+        cp ./hub-linux-amd64-2.3.0-pre8/bin/hub /usr/local/bin/        
       '''
     },
     {
@@ -86,6 +90,59 @@
           ulimit -n 9999
           dev sync $([[ $_verbose -eq 1 ]] && echo "-v") -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $_path
         '''
-    }]   
-   }
+    }],   
+    save: [{
+      server:
+      '''
+        set -e
+        cd $REPO_ROOT
+        local _new=0
+
+        # Argument handling
+        while [ "$#" -gt 0 ]
+        do
+        opt="$1"
+        shift
+        case "$opt" in
+          --new|-n)
+            _new=1
+            ;;
+        esac
+        done          
+        
+        if [[ $_new == 1 ]]; then
+            printf "New github repository name: "
+            read GITHUB_REPO
+            export GITHUB_REPO
+
+            printf "Username for 'https://github.com': "
+            read GITHUB_USER
+            export GITHUB_USER
+
+            printf "Password for 'https://$GITHUB_USER@github.com':"
+            read -s GITHUB_PASSWORD
+            export  GITHUB_PASSWORD
+            printf "\n"
+            
+            user_json="$(curl -sSL -u $GITHUB_USER:$GITHUB_PASSWORD https://api.github.com/user | jq .)"
+            set +e
+            git config --global --unset-all user.email
+            git config --global --unset-all user.name
+            set -e
+            git config --global user.email "$(echo "$user_json" | jq -r .email)"
+            git config --global user.name "$(echo "$user_json" | jq -r .name)"
+
+            hub create -d "Forked" $GITHUB_REPO
+            hub remote set-url origin https://github.com/$GITHUB_USER/$GITHUB_REPO.git
+            echo "https://${GITHUB_USER}:${GITHUB_PASSWORD}@github.com/$GITHUB_USER/$GITHUB_REPO.git" > ~/.git-credentials
+        fi
+
+        set +e
+        hub add -A
+        hub commit
+        set -e
+        hub push origin master
+      '''
+    }]
+  }
 }
